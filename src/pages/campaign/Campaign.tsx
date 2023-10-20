@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Campaign.module.css';
 import {
     addCampaign,
@@ -217,6 +217,8 @@ const Campaign = () => {
             }
 
             case 'DELETE_ADS' : {
+                
+
                 setDataSubmit((prevObject) => {
                     const updatedSubCampaigns = [...prevObject.subCampaigns];
                     updatedSubCampaigns[choosenSubCampaignIdx] = {
@@ -229,20 +231,6 @@ const Campaign = () => {
                 break;
             }
 
-            case 'DELETE_ALL_ADS': {
-                const updateData = dataSubmit.subCampaigns.map((item, index) => 
-                   index === choosenIdx ? {...item, ads: []} : item
-                )
-
-                setDataSubmit(prevObject => ({
-                    ...prevObject,
-                    subCampaigns: updateData    
-                }));
-
-                setCheckedAds([]);
-                setCheckedAllUi(false);
-                break;
-            }
 
             default : {
                 break;
@@ -252,6 +240,20 @@ const Campaign = () => {
         
 
     }
+
+    const deleteOptionsSubCampaign = (checkAdArray: any) => {
+        setDataSubmit((prevState) => {
+            const updateData = { ...prevState };
+
+            if (updateData.subCampaigns.length > 0) {
+                const adsArray = updateData.subCampaigns[choosenSubCampaignIdx].ads;
+                const updatedAdsArray = adsArray.filter((_, index) => !checkAdArray.includes(index));
+                updateData.subCampaigns[choosenSubCampaignIdx].ads = updatedAdsArray;
+            }
+            setCheckedAds([]);
+            return updateData;
+        });
+    };
 
     const tabFuncOne = () => {
 
@@ -297,14 +299,19 @@ const Campaign = () => {
         )
     }
 
+    useEffect(() => {
+        if(checkedAds.length > 0) {
+            setCheckedAllUi(true)
+        }else{
+            setCheckedAllUi(false)
+        }
+    }, [checkedAds, checkedAllUi])
 
     const tabFuncTwo = () => {
         const handleChange1 = (isChecked: any, listIdx: any) => {
             if (isChecked){
-                setCheckedAllUi(true)
                 setCheckedAds(listIdx)
             }else {
-                setCheckedAllUi(false)
                 setCheckedAds([])
             };
         };
@@ -312,7 +319,8 @@ const Campaign = () => {
         const handleChange2 = (isChecked: any, idx: any) => {
 
             if (isChecked) {
-                return setCheckedAds((state: any) => [...state, idx])
+                setCheckedAds((state: any) => [...state, idx]);
+                
             }else{
                 const newData = checkedAds.filter((item: any) => item !== idx)
                 setCheckedAds(newData);
@@ -409,7 +417,8 @@ const Campaign = () => {
                                     <TableRow>
                                         <TableCell padding="checkbox">
                                             <Checkbox
-                                                color="primary"
+                                                color= {checkedAds.length !== dataSubmit.subCampaigns[choosenSubCampaignIdx].ads.length &&
+                                                    checkedAds.length > 0 ? 'default': 'primary'}
                                                 disabled = {dataSubmit.subCampaigns[choosenSubCampaignIdx].ads.length === 0 ? true : false}
                                                 checked={checkedAds.length === dataSubmit.subCampaigns[choosenSubCampaignIdx].ads.length && checkedAds.length > 0}
                                                 indeterminate={
@@ -423,7 +432,9 @@ const Campaign = () => {
                                         <TableCell 
                                             colSpan={2}
                                             style={checkedAllUi ? {display: 'table-cell'} : {display: 'none'}}>
-                                            <IconButton aria-label="delete" onClick={(event) => handleChangeSubCampaign(event, choosenSubCampaignIdx, 'DELETE_ALL_ADS' )}>
+                                            <IconButton 
+                                                aria-label="delete" 
+                                                onClick={() => deleteOptionsSubCampaign(checkedAds)}>
                                                 <DeleteIcon />
                                             </IconButton>
                                         </TableCell>
@@ -525,7 +536,10 @@ const Campaign = () => {
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        <IconButton aria-label="delete" onClick={(event) => handleChangeSubCampaign(event, index, 'DELETE_ADS' )}>
+                                                        <IconButton 
+                                                            aria-label="delete" 
+                                                            disabled = {checkedAllUi}
+                                                            onClick={(event) => handleChangeSubCampaign(event, index, 'DELETE_ADS' )}>
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </TableCell>
