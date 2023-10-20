@@ -1,0 +1,6 @@
+.campaignFlexBox {
+    display: flex;
+    overflow: auto;
+    width: max-content;
+}
+
