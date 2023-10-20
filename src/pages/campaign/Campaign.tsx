@@ -71,7 +71,6 @@ const Campaign = () => {
         });
 
         if (emptyFieldsIndex.length > 0) {
-            console.log(emptyFieldsIndex);
             setListEmptyField(emptyFieldsIndex)
             return true;
             
@@ -264,6 +263,7 @@ const Campaign = () => {
                     <div>
                         <TextField
                             label= {VNASettings.CAMPAIGN.textField.tabOne.fieldOne}
+                            value={dataSubmit.information.name}
                             variant="standard"
                             required
                             error={helper.checkValidation(dataSubmit.information.name) && !firstTimeRender}
@@ -281,6 +281,7 @@ const Campaign = () => {
                     <div style={{marginTop: '15px'}}>
                         <TextField
                             label= {VNASettings.CAMPAIGN.textField.tabOne.fieldTwo}
+                            value={dataSubmit.information.describe}
                             variant="standard"
                             onChange={(event) => setDataSubmit({
                                 ...dataSubmit,
