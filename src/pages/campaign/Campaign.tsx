@@ -222,8 +222,8 @@ const Campaign = () => {
                 setDataSubmit((prevObject) => {
                     const updatedSubCampaigns = [...prevObject.subCampaigns];
                     updatedSubCampaigns[choosenSubCampaignIdx] = {
-                    ...updatedSubCampaigns[choosenSubCampaignIdx],
-                        ads: updatedSubCampaigns[choosenSubCampaignIdx].ads.filter((ad: any, index: any) => index !== choosenIdx)
+                        ...updatedSubCampaigns[choosenSubCampaignIdx],
+                        ads: updatedSubCampaigns[choosenSubCampaignIdx].ads.filter((_, index: any) => index !== choosenIdx)
                     }
 
                     return { ...prevObject, subCampaigns: updatedSubCampaigns };
@@ -242,16 +242,17 @@ const Campaign = () => {
     }
 
     const deleteOptionsSubCampaign = (checkAdArray: any) => {
-        setDataSubmit((prevState) => {
-            const updateData = { ...prevState };
-
-            if (updateData.subCampaigns.length > 0) {
-                const adsArray = updateData.subCampaigns[choosenSubCampaignIdx].ads;
-                const updatedAdsArray = adsArray.filter((_, index) => !checkAdArray.includes(index));
-                updateData.subCampaigns[choosenSubCampaignIdx].ads = updatedAdsArray;
+        setDataSubmit((prevObject) => {
+            
+            const updatedSubCampaigns = [...prevObject.subCampaigns];
+            if (updatedSubCampaigns.length > 0) {
+                updatedSubCampaigns[choosenSubCampaignIdx] = {
+                    ...updatedSubCampaigns[choosenSubCampaignIdx],
+                    ads: updatedSubCampaigns[choosenSubCampaignIdx].ads.filter((_, index) => !checkAdArray.includes(index))
+                };
             }
             setCheckedAds([]);
-            return updateData;
+            return {...prevObject, subCampaigns: updatedSubCampaigns};
         });
     };
 
@@ -379,7 +380,7 @@ const Campaign = () => {
                 </div>
                 
 
-                <div style={{marginTop: '24px'}}>
+                <div style={{marginTop: '24px', paddingLeft: '14px'}}>
                     <div style={{display: 'flex', alignItems: 'center'}}>
                         <div style={{width: '65%'}}>
                             <TextField
@@ -408,9 +409,17 @@ const Campaign = () => {
                     
                 </div>
 
-                <div style={{marginTop: '24px'}}>
+                <div style={{marginTop: '35px'}}>
                     <Box sx={{ width: '100%' }}>
-                        <TableContainer>
+                        <Typography 
+                            variant="h5" 
+                            component="div"
+                            sx= {{paddingLeft: '14px'}}>
+  
+                            DANH SÁCH QUẢNG CÁO
+
+                        </Typography>
+                        <TableContainer >
                             <Table
                                 sx={{ minWidth: 750 }}>
                                 <TableHead>
