@@ -60,7 +60,7 @@ const Campaign = () => {
         }
 
         obj.subCampaigns.forEach((subCampaign: any, index: any) => {
-            if (!subCampaign.name || !subCampaign.status || subCampaign.ads.length === 0) {
+            if (!subCampaign.name || subCampaign.ads.length === 0) {
                 emptyFieldsIndex.push(index);
             }
             
@@ -349,14 +349,7 @@ const Campaign = () => {
                                                 style={listEmptyField[index] === index || !dataSubmit.information.name ? {color: 'red'} : {color: 'inherit'}}>
                                                 {item?.name} 
 
-                                                {
-                                                    listEmptyField[index] === index || !dataSubmit.information.name ? 
-                                                    <DoNotDisturbIcon style={{color: 'red', fontSize: '14px', marginLeft: '3px'}} />
-
-                                                    :
-
-                                                    <CheckCircleIcon style={{color: 'green', fontSize: '14px', marginLeft: '3px'}} />
-                                                }
+                                                <CheckCircleIcon style={item.status ? {color: 'green', fontSize: '14px', marginLeft: '3px'} : {color: 'rgb(141, 141, 141)', fontSize: '14px', marginLeft: '3px'}} />
                                             </Typography>
                                             
                                             <Tooltip title="Số lượng" arrow placement="left">
@@ -393,7 +386,7 @@ const Campaign = () => {
 
                         <div style={{width: '35%', display: 'flex', justifyContent: 'center'}}>
                             <FormControlLabel
-                                label= {dataSubmit.subCampaigns[choosenSubCampaignIdx].status ? 'Đang hoạt động' : 'Ngừng hoạt động'}
+                                label='Đang hoạt động'
                                 control={
                                 <Checkbox
                                     checked={dataSubmit.subCampaigns[choosenSubCampaignIdx].status}
